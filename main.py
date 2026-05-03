@@ -69,7 +69,11 @@ def map_to_ekman(input_file, output_file):
     print(f"{input_file} -> {output_file} | {len(df)} rows")
 
 def tokenize(text):
-    return re.findall(r"\b\w+\b", text.lower())
+    text = text.lower()
+    text = re.sub(r"\d+", "NUM", text) # numbers are not needed so replace with token
+    tokens = re.findall(r"\b\w+\b", text) # tokenization
+    tokens = [t for t in tokens if len(t) > 1 or t == "I"] # remove all short words aside from I
+    return tokens
 
 def tokenize_file(input_file, output_file):
     df = pd.read_csv(input_file, sep="\t", header=None, names=["text", "label"])
