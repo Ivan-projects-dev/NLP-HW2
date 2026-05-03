@@ -77,13 +77,14 @@ def tokenize_file(input_file, output_file):
     df.to_csv(output_file, sep="\t", index=False, header=False)
     print(f"{input_file} -> {output_file}")
 
-os.chdir(os.path.dirname(__file__))
-clean_all_files()
+if __name__ == "__main__":
+    os.chdir(os.path.abspath(os.path.dirname(__file__)))
+    clean_all_files()
 
-map_to_ekman("train_clean.tsv", "train_ekman.tsv")
-map_to_ekman("dev_clean.tsv", "dev_ekman.tsv")
-map_to_ekman("test_clean.tsv", "test_ekman.tsv")
+    map_to_ekman("train_clean.tsv", "train_ekman.tsv")
+    map_to_ekman("dev_clean.tsv", "dev_ekman.tsv")
+    map_to_ekman("test_clean.tsv", "test_ekman.tsv")
 
-tokenize_file("train_ekman.tsv", "train_tokenized.tsv")
-tokenize_file("dev_ekman.tsv", "dev_tokenized.tsv")
-tokenize_file("test_ekman.tsv", "test_tokenized.tsv")
+    tokenize_file("train_ekman.tsv", "train_tokenized.tsv")
+    tokenize_file("dev_ekman.tsv", "dev_tokenized.tsv")
+    tokenize_file("test_ekman.tsv", "test_tokenized.tsv")
