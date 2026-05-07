@@ -16,7 +16,7 @@ def top_unigrams(file, top_n=10):
     df = load_df(file)
     print("\nTop words per class:\n")
   
-    for label in df["label"].unique():
+    for label in sorted(df["label"].unique()):
         words = []
         texts = df[df["label"] == label]["text"]
         
@@ -30,7 +30,7 @@ def top_bigrams(file, top_n=10):
     df = load_df(file)
     print("\nTop bigrams per class:\n")
     
-    for label in df["label"].unique():
+    for label in sorted(df["label"].unique()):
         bigrams = []
         texts = df[df["label"] == label]["text"]
         
