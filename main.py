@@ -77,7 +77,7 @@ def tokenize(text):
 
 def tokenize_file(input_file, output_file):
     df = pd.read_csv(input_file, sep="\t", header=None, names=["text", "label"])
-    df["text"] = df["text"].apply(lambda x: " ".join(tokenize(x))) # tokenize text and join tokens back into string
+    df["text"] = df["text"].apply(lambda x: " ".join(tokenize(str(x)))) # tokenize text and join tokens back into string
     df.to_csv(output_file, sep="\t", index=False, header=False)
     print(f"{input_file} -> {output_file}")
 

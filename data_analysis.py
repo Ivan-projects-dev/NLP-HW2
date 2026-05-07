@@ -2,15 +2,18 @@ import os
 import pandas as pd
 from collections import Counter
 
-def class_distribution(file):
+def load_df(file):
     df = pd.read_csv(file, sep="\t", header=None, names=["text", "label"])
     df["text"] = df["text"].fillna("")
+    return df
+
+def class_distribution(file):
+    df = load_df(file)
     print("\nClass distribution:")
     print(df["label"].value_counts()) # num of samples per class
 
 def top_unigrams(file, top_n=10):
-    df = pd.read_csv(file, sep="\t", header=None, names=["text", "label"])
-    df["text"] = df["text"].fillna("")
+    df = load_df(file)
     print("\nTop words per class:\n")
   
     for label in df["label"].unique():
@@ -24,8 +27,7 @@ def top_unigrams(file, top_n=10):
         print(f"{label}: {counter.most_common(top_n)}\n")
 
 def top_bigrams(file, top_n=10):
-    df = pd.read_csv(file, sep="\t", header=None, names=["text", "label"])
-    df["text"] = df["text"].fillna("")
+    df = load_df(file)
     print("\nTop bigrams per class:\n")
     
     for label in df["label"].unique():
@@ -33,15 +35,14 @@ def top_bigrams(file, top_n=10):
         texts = df[df["label"] == label]["text"]
         
         for t in texts:
-            words = t.split()
+            words = str(t).split()
             bigrams.extend(zip(words, words[1:]))
         
         counter = Counter(bigrams)
         print(f"{label}: {counter.most_common(top_n)}\n") 
 
 def vocabulary_size(file):
-    df = pd.read_csv(file, sep="\t", header=None, names=["text", "label"])
-    df["text"] = df["text"].fillna("")
+    df = load_df(file)
     vocab = set()
     
     for t in df["text"]:

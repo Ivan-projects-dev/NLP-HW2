@@ -35,8 +35,12 @@ if __name__ == "__main__":
 
     tfidf_model = Pipeline([
         ("vectorizer", TfidfVectorizer(max_features=10000)), # convert into TF-IDF feature vectors to limit vocabulary sizes
-        ("classifier", LogisticRegression(solver="saga", max_iter=200, class_weight="balanced", n_jobs=-1 # use all CPU cores
-        )) 
+        ("classifier", LogisticRegression(
+            solver="saga",
+            max_iter=200,
+            class_weight="balanced",
+            n_jobs=-1  # use all CPU cores
+        ))
     ])
 
     count_model = Pipeline([
