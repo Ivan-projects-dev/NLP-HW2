@@ -5,7 +5,7 @@ import re
 def clean_all_files(file_names=("train.tsv", "dev.tsv", "test.tsv")):
     for file in file_names:
         df = pd.read_csv(file, sep="\t", header=None, names=["text", "label", "id"])
-        df = df[~df["label"].astype(str).str.contains(",")]
+        df = df[~df["label"].astype(str).str.contains(",")] # remove multi-label samples
         df = df[["text", "label"]]
         output_file = file.replace(".tsv", "_clean.tsv")
         df.to_csv(output_file, sep="\t", index=False, header=False)
@@ -61,28 +61,28 @@ def map_to_ekman(input_file, output_file):
         for k, v in ekman.items():
             if emotion in v:
                 return k
-        return None
+        return None # should not happen
 
     df["label"] = df["label"].apply(map_label)
-    df = df[df["label"].notnull()]
+    df = df[df["label"].notnull()] # remove any unmapped rows
     df.to_csv(output_file, sep="\t", index=False, header=False)
     print(f"{input_file} -> {output_file} | {len(df)} rows")
 
 def tokenize(text):
     text = text.lower()
     text = re.sub(r"\d+", "NUM", text) # numbers are not needed so replace with token
-    tokens = re.findall(r"\b\w+\b", text) # tokenization
-    tokens = [t for t in tokens if len(t) > 1 or t == "I"] # remove all short words aside from I
+    tokens = re.findall(r"\b\w+\b", text) # split text into words using regex
+    tokens = [t for t in tokens if len(t) > 1 or t == "i"] # remove all short words aside from i (lowercase I)
     return tokens
 
 def tokenize_file(input_file, output_file):
     df = pd.read_csv(input_file, sep="\t", header=None, names=["text", "label"])
-    df["text"] = df["text"].apply(lambda x: " ".join(tokenize(x)))
+    df["text"] = df["text"].apply(lambda x: " ".join(tokenize(x))) # tokenize text and join tokens back into string
     df.to_csv(output_file, sep="\t", index=False, header=False)
     print(f"{input_file} -> {output_file}")
 
 if __name__ == "__main__":
-    os.chdir(os.path.abspath(os.path.dirname(__file__)))
+    os.chdir(os.path.abspath(os.path.dirname(__file__))) # ensures script works regardless of directory
     clean_all_files()
 
     map_to_ekman("train_clean.tsv", "train_ekman.tsv")

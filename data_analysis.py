@@ -6,7 +6,7 @@ def class_distribution(file):
     df = pd.read_csv(file, sep="\t", header=None, names=["text", "label"])
     df["text"] = df["text"].fillna("")
     print("\nClass distribution:")
-    print(df["label"].value_counts())
+    print(df["label"].value_counts()) # num of samples per class
 
 def top_unigrams(file, top_n=10):
     df = pd.read_csv(file, sep="\t", header=None, names=["text", "label"])
@@ -18,7 +18,7 @@ def top_unigrams(file, top_n=10):
         texts = df[df["label"] == label]["text"]
         
         for t in texts:
-            words.extend(str(t).split())
+            words.extend(str(t).split()) # split text into words and add to list
         
         counter = Counter(words)
         print(f"{label}: {counter.most_common(top_n)}\n")
@@ -37,7 +37,7 @@ def top_bigrams(file, top_n=10):
             bigrams.extend(zip(words, words[1:]))
         
         counter = Counter(bigrams)
-        print(f"{label}: {counter.most_common(top_n)}\n")
+        print(f"{label}: {counter.most_common(top_n)}\n") 
 
 def vocabulary_size(file):
     df = pd.read_csv(file, sep="\t", header=None, names=["text", "label"])
@@ -47,10 +47,10 @@ def vocabulary_size(file):
     for t in df["text"]:
         vocab.update(t.split())
     
-    print(f"\nVocabulary size: {len(vocab)}")
+    print(f"\nVocabulary size: {len(vocab)}") # total num of unique tokens
 
 if __name__ == "__main__":
-    os.chdir(os.path.abspath(os.path.dirname(__file__)))
+    os.chdir(os.path.abspath(os.path.dirname(__file__))) # ensures script works regardless of directory
     class_distribution("train_tokenized.tsv")
     
     top_unigrams("train_tokenized.tsv")
